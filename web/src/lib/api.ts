@@ -6,7 +6,8 @@ export interface Bookmark {
   summary?: string;
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || '/api';
+// Use the correct environment variable name for the public API base URL.
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
 
 export async function addBookmark(url: string): Promise<Bookmark> {
   const res = await fetch(`${API_BASE}/bookmarks`, {
@@ -28,8 +29,8 @@ export async function listBookmarks(query?: string): Promise<Bookmark[]> {
     const err = await res.json();
     throw new Error(err.error || 'Failed to fetch bookmarks');
   }
-  const data = await res.json();
-  return data.bookmarks;
+  // The backend returns an array directly.
+  return await res.json();
 }
 
 export async function exportBookmarks(): Promise<Blob> {
